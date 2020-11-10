@@ -6,7 +6,8 @@ namespace monopoly
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            HelloWorldGenerator generator = new HelloWorldGenerator();
+            Console.WriteLine(generator.Show("Renato"));
         }
     }
 }
