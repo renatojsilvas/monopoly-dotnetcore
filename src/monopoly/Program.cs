@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Monopoly
+namespace monopoly
 {
     class Program
     {
