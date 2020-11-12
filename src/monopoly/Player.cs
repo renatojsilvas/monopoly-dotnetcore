@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace monopoly
 {
@@ -16,8 +17,20 @@ namespace monopoly
         {        
         }
 
+        public static List<Player> FromStrategies(int initialBalance)
+        {
+            List<Player> players = new List<Player>()
+            {
+                new Player(initialBalance),
+                new Player(initialBalance, new Cautious()),
+                new Player(initialBalance, new Gambler(new RandomChoice())),
+                new Player(initialBalance, new Demanding())
+            };
+            return players;
+        }
+
         public int Balance { private set; get; }
-        public Strategy Strategy { get; }
+        public Strategy Strategy { get; }       
 
         public Player(int balance) 
         : this(balance, new Impulsive())
@@ -60,6 +73,6 @@ namespace monopoly
             }
 
             return this.Pay(price);    
-        }
+        }       
     }
 }

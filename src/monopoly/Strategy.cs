@@ -5,7 +5,7 @@ namespace monopoly
     public abstract class Strategy
     {
         public abstract bool ShouldBuy(int balance, int price, int rent);
-       
+
         public override abstract string ToString();
     }
 
@@ -37,9 +37,14 @@ namespace monopoly
 
     public class Gambler : Strategy
     {
+        private readonly IRandomChoice randomChoice;
+        public Gambler(IRandomChoice randomChoice)
+        {
+            this.randomChoice = randomChoice;
+        }
         public override bool ShouldBuy(int balance, int price, int rent)
         {
-            return new Random().NextDouble() >= 0.5;
+            return randomChoice.Choice();
         }
 
         public override string ToString()

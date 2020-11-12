@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using monopoly;
 using Moq;
+using System.Collections.Generic;
 
 namespace monopoly.tests
 {
@@ -161,14 +162,10 @@ namespace monopoly.tests
         public void TestInvestGambler()
         {
             //Arrange
-            var mock = new Mock<Strategy>();
-            mock.Setup(s => 
-                    s.ShouldBuy(
-                        It.IsAny<int>(), 
-                        It.IsAny<int>(), 
-                        It.IsAny<int>())).Returns(true);
-            var s = mock.Object;
-            var p = new Player(100, s);
+            var mock = new Mock<IRandomChoice>();
+            mock.Setup(s => s.Choice()).Returns(true);
+            var randomChoice = mock.Object;
+            var p = new Player(100, new Gambler(randomChoice));
 
             //Act
             var value = p.Invest(100, 10);
@@ -182,14 +179,10 @@ namespace monopoly.tests
         public void TestInvestGamblerAbort()
         {
             //Arrange
-            var mock = new Mock<Strategy>();
-            mock.Setup(s => 
-                    s.ShouldBuy(
-                        It.IsAny<int>(), 
-                        It.IsAny<int>(), 
-                        It.IsAny<int>())).Returns(false);
-            var s = mock.Object;
-            var p = new Player(100, s);
+            var mock = new Mock<IRandomChoice>();
+            mock.Setup(s => s.Choice()).Returns(false);
+            var randomChoice = mock.Object;
+            var p = new Player(100, new Gambler(randomChoice));
 
             //Act
                         
@@ -203,12 +196,33 @@ namespace monopoly.tests
             //Arrange
             var p1 = new Player(100);
             var p2 = new Player(100, new Cautious());
-            var p3 = new Player(100, new Gambler());
+            var p3 = new Player(100, new Gambler(null));
             var p4 = new Player(100, new Demanding());
 
             //Act
                         
             //Assert
+            Assert.AreEqual("Impulsive", p1.ToString());
+            Assert.AreEqual("Cautious", p2.ToString());
+            Assert.AreEqual("Gambler", p3.ToString());
+            Assert.AreEqual("Demanding", p4.ToString());
+        }
+
+        [Test]
+        public void TestFactory()
+        {
+            //Arrange
+            List<Player> p = Player.FromStrategies(300);
+            var p1 = p[0];
+            var p2 = p[1];
+            var p3 = p[2];
+            var p4 = p[3];
+
+            //Act
+                        
+            //Assert
+            Assert.AreEqual(4, p.Count);
+            p.ForEach(player => Assert.IsTrue(player.Balance == 300));
             Assert.AreEqual("Impulsive", p1.ToString());
             Assert.AreEqual("Cautious", p2.ToString());
             Assert.AreEqual("Gambler", p3.ToString());
