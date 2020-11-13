@@ -12,7 +12,7 @@
 
 ## Passo-a-Passo para rodar os testes
 * Gerar a imagem do programa a partir de **docker build --target testrunner -t monopoly-simulation-tests:latest .**
-* Rodar os testes com **docker run monopoly-simulation-tests:latest**
+* Rodar os testes com **docker run --rm -it monopoly-simulation-tests:latest**
 * Se tiver o dotnetcore sdk instalado, restaurar o projeto na raiz do projeto com **dotnet restore**. Para rodar execute **dotnet test** na pasta raiz
 
 ## Para contribuir
