@@ -1,24 +1,50 @@
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace monopoly
 {
     public class Simulation
     {
         private Random r;
+        private readonly int population;
 
-        public Simulation()
+        public Simulation(int population)
         {
-            r = new Random();            
+            r = new Random();
+            this.population = population;
         }
 
-        public void Exercise()
+        public string Run()
+        {           
+            Dictionary<string, int> stats = new Dictionary<string, int>();            
+            Parallel.For(0, this.population,
+            i => {
+                    var winner = Exercise();                
+                    if (!stats.ContainsKey(winner))
+                    {
+                        stats.Add(winner, 0);
+                    }
+                    stats[winner] += 1;    
+                 });        
+
+            stats = stats.OrderByDescending(s => s.Value).ToDictionary(s => s.Key, s => s.Value);
+            string output = $"Simulations: {this.population}\n";
+            foreach(var s in stats)
+            {
+                output += $"{s.Key}: {(((double)s.Value / this.population) * 100.0):F2} %\n";
+            }
+            return output;
+        }
+
+        public string Exercise()
         {
             Game g = GameFactory();
             Player winner = g.Run();
+            return winner.ToString();
         }
-
         private Game GameFactory()
         {
             return new Game(GeneratePlayers(300), GenerateProperties(20), new Dice());

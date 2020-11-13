@@ -7,8 +7,8 @@ namespace monopoly
     {
         static void Main(string[] args)
         {
-            Simulation s = new Simulation();
-            s.Exercise();
+            Simulation s = new Simulation(10000);
+            Console.WriteLine(s.Run());
         }
     }
 }
