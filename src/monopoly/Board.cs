@@ -1,14 +1,3 @@
-using System.Diagnostics.Contracts;
-using System.Security;
-using System.Text.RegularExpressions;
-using System.Dynamic;
-using System.Collections.Specialized;
-using System.Collections;
-using System.Threading;
-using System.Diagnostics;
-using System;
-using System.Globalization;
-using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 
 namespace monopoly
@@ -27,7 +16,15 @@ namespace monopoly
             {
                 return this.Properties.Count;
             }
-        }
+        }  
+
+        public int NumberOfActivePlayers
+        {
+            get
+            {
+                return this.Players.Count;
+            }
+        }        
 
         public Board(List<Player> players, List<RealState> properties, int bonus = 100)
         {
@@ -83,6 +80,11 @@ namespace monopoly
             {
                 Remove(player);
             }            
+        }
+
+        public bool InGame(Player player)
+        {
+            return this.Players.ContainsKey(player);
         }
     }
 }

@@ -1,9 +1,5 @@
-using System.Threading;
-using System;
-using System.ComponentModel;
 using System.Collections.Generic;
 using NUnit.Framework;
-using monopoly;
 
 namespace monopoly.tests
 {
@@ -139,6 +135,39 @@ namespace monopoly.tests
             //Assert            
             Assert.IsTrue(b.Players.ContainsKey(p1));
             Assert.IsFalse(b.Players.ContainsKey(p2));            
+        }
+
+        [Test]
+        public void TestPlayerInGame()
+        {
+            //Arrange            
+            Player p1 = new Player(200);
+            Player p2 = new Player(49);  
+            RealState r = new RealState(100, 50, owner: p1);           
+            Board b = new Board(new List<Player>() { p1, p2 }, new List<RealState>() { r });
+
+            //Act            
+            b.Turn(p2, 1);
+
+            //Assert            
+            Assert.IsTrue(b.InGame(p1));
+            Assert.IsFalse(b.InGame(p2));
+        }
+
+        [Test]
+        public void TestNumberOfActivePlayers()
+        {
+            //Arrange            
+            Player p1 = new Player(200);
+            Player p2 = new Player(49);  
+            RealState r = new RealState(100, 50, owner: p1);           
+            Board b = new Board(new List<Player>() { p1, p2 }, new List<RealState>() { r });
+
+            //Act            
+            b.Turn(p2, 1);
+
+            //Assert            
+            Assert.AreEqual(1, b.NumberOfActivePlayers);
         }
     }
 }

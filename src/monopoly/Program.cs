@@ -7,22 +7,14 @@ namespace monopoly
     {
         static void Main(string[] args)
         {
-            Player p = new Player(0);    
-            RealState r = new RealState(100, 10);            
-            Board b = new Board(new List<Player>() { p }, new List<RealState>() { r, r, r });
+           Player p1 = new Player(100);
+            Player p2 = new Player(100);
+            RealState r = new RealState(100, 10);
+            Game g = new Game(new List<Player>(){ p1, p2 }, 
+                              new List<RealState>(){ r },
+                              null);
 
-            //Act
-            RealState rfinal = b.Move(p, 1);
-            
-            rfinal = b.Move(p, 1);
-            rfinal = b.Move(p, 1);
-            rfinal = b.Move(p, 1);
-            rfinal = b.Move(p, 1);
-            rfinal = b.Move(p, 1);
-            rfinal = b.Move(p, 1);
-            rfinal = b.Move(p, 1);
-
-            
+            g.Run(998);    
         }
     }
 }
