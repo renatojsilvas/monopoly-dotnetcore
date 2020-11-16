@@ -18,7 +18,7 @@ namespace monopoly.tests
             //Arrange
             List<Player> players = Player.FromStrategies(300);
             RealState r = new RealState(100, 10);
-            Game g = new Game(players, new List<RealState>(){ r });
+            Game g = new Game(new Players(players), new List<RealState>(){ r });
 
             //Act
 
@@ -33,7 +33,7 @@ namespace monopoly.tests
             //Arrange
             List<Player> players = Player.FromStrategies(0);
             RealState r = new RealState(100, 10);
-            Game g = new Game(players, new List<RealState>(){ r });
+            Game g = new Game(new Players(players), new List<RealState>(){ r });
 
             //Act
             players[0].Receive(1);
@@ -49,7 +49,7 @@ namespace monopoly.tests
             //Arrange
             List<Player> players = Player.FromStrategies(0);
             RealState r = new RealState(100, 10);
-            Game g = new Game(players, new List<RealState>(){ r });
+            Game g = new Game(new Players(players), new List<RealState>(){ r });
 
             //Act
             players[1].Receive(1);
@@ -64,7 +64,7 @@ namespace monopoly.tests
             //Arrange
             List<Player> players = Player.FromStrategies(0);
             RealState r = new RealState(100, 10);
-            Game g = new Game(players, new List<RealState>(){ r });
+            Game g = new Game(new Players(players), new List<RealState>(){ r });
 
             //Act
 
@@ -82,7 +82,7 @@ namespace monopoly.tests
             var mock = new Mock<IDice>();
             mock.Setup(s => s.Roll()).Returns(1);
             var dice = mock.Object;
-            Game g = new Game(new List<Player>(){ p1, p2 }, 
+            Game g = new Game(new Players(new List<Player>(){ p1, p2 }), 
                               new List<RealState>(){ r },
                               dice);
 
@@ -103,7 +103,7 @@ namespace monopoly.tests
             var mock = new Mock<IDice>();
             mock.Setup(s => s.Roll()).Returns(1);
             var dice = mock.Object;
-            Game g = new Game(new List<Player>(){ p1, p2 }, 
+            Game g = new Game(new Players(new List<Player>(){ p1, p2 }), 
                               new List<RealState>(){ r },
                               dice);
 

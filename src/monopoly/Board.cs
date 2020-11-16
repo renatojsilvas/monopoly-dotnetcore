@@ -4,9 +4,9 @@ namespace monopoly
 {
     public class Board
     {
-        public Dictionary<Player, int> Players = new Dictionary<Player, int>();        
+        public Dictionary<Player, int> PlayersPositions = new Dictionary<Player, int>();        
 
-        public List<Player> players;
+        public Players activePlayers;
         public List<RealState> Properties { get; }
         public int Bonus { get; }
 
@@ -18,28 +18,23 @@ namespace monopoly
             }
         }  
 
-        public int NumberOfActivePlayers
+        public Board(Players players, List<RealState> properties, int bonus = 100)
         {
-            get
+            this.activePlayers = players;
+            foreach (var p in this.activePlayers)
             {
-                return this.Players.Count;
+                PlayersPositions.Add(p, -1);
             }
-        }        
-
-        public Board(List<Player> players, List<RealState> properties, int bonus = 100)
-        {
-            this.players = players;
-            this.players.ForEach(p => Players.Add(p, -1));               
             this.Properties = properties;
             this.Bonus = bonus;
         }
 
         public RealState Move(Player player, int positions)
         {
-            int currentPosition = this.Players[player];
+            int currentPosition = this.PlayersPositions[player];
             int newLap = (currentPosition + positions) / this.Size;
             int newPos = (currentPosition + positions) % this.Size;
-            this.Players[player] = newPos;
+            this.PlayersPositions[player] = newPos;
 
             if (newLap > 0)
                 player.Receive(this.Bonus);
@@ -57,7 +52,7 @@ namespace monopoly
                 }
             }
 
-            this.Players.Remove(player);
+            this.activePlayers.Remove(player);
         }
 
         public void Turn(Player player, int positions)
@@ -80,11 +75,6 @@ namespace monopoly
             {
                 Remove(player);
             }            
-        }
-
-        public bool InGame(Player player)
-        {
-            return this.Players.ContainsKey(player);
         }
     }
 }

@@ -19,16 +19,16 @@ namespace monopoly
 
         public string Run()
         {           
-            Dictionary<string, int> stats = new Dictionary<string, int>();            
-            Parallel.For(0, this.population,
-            i => {
-                    var winner = Exercise();                
-                    if (!stats.ContainsKey(winner))
-                    {
-                        stats.Add(winner, 0);
-                    }
-                    stats[winner] += 1;    
-                 });        
+            Dictionary<string, int> stats = new Dictionary<string, int>();
+            for (int i = 0; i < population; i++)
+            {
+                var winner = Exercise();
+                if (!stats.ContainsKey(winner))
+                {
+                    stats.Add(winner, 0);
+                }
+                stats[winner] += 1;
+            }      
 
             stats = stats.OrderByDescending(s => s.Value).ToDictionary(s => s.Key, s => s.Value);
             string output = $"Simulations: {this.population}\n";
@@ -50,15 +50,15 @@ namespace monopoly
             return new Game(GeneratePlayers(300), GenerateProperties(20), new Dice());
         }
 
-        private List<Player> GeneratePlayers(int initialBalance)
+        private Players GeneratePlayers(int initialBalance)
         {
             List<Player> players = Player.FromStrategies(initialBalance);
             return Shuffle(players);
         }
 
-        private List<Player> Shuffle(List<Player> players)
+        private Players Shuffle(List<Player> players)
         {
-            return players.OrderBy(a => Guid.NewGuid()).ToList();
+            return new Players(players.OrderBy(a => Guid.NewGuid()).ToList());
         }
 
         private List<RealState> GenerateProperties(int howMany, int mean = 5, int deviation = 1, int priceScale = 20, int rentScale = 10)

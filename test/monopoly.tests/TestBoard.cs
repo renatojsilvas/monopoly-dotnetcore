@@ -16,12 +16,12 @@ namespace monopoly.tests
             //Arrange
             List<Player> players = new List<Player>();
             List<RealState> properties = new List<RealState>();
-            Board b = new Board(players, properties, bonus: 1);
+            Board b = new Board(new Players(players), properties, bonus: 1);
 
             //Act
 
             //Assert
-            Assert.AreEqual(0, b.Players.Count);
+            Assert.AreEqual(0, b.PlayersPositions.Count);
             Assert.AreEqual(0, b.Properties.Count);
             Assert.AreEqual(1, b.Bonus);            
         }
@@ -32,7 +32,7 @@ namespace monopoly.tests
             //Arrange
             Player p = new Player(0);    
             RealState r = new RealState(100, 10);            
-            Board b = new Board(new List<Player>() { p }, new List<RealState>() { r });
+            Board b = new Board(new Players(new List<Player>() { p } ), new List<RealState>() { r });
 
             //Act
             RealState rfinal = b.Move(p, 1);
@@ -49,7 +49,7 @@ namespace monopoly.tests
         {
             //Arrange            
             RealState r = new RealState(100, 10);            
-            Board b = new Board(new List<Player>(), new List<RealState>() { r });
+            Board b = new Board(new Players(new List<Player>()), new List<RealState>() { r });
 
             //Act            
 
@@ -61,15 +61,16 @@ namespace monopoly.tests
         public void TestRemove()
         {
             //Arrange            
-            Player p = new Player(0);  
+            Player p = new Player(0);
+            Players activePlayers = new Players(new List<Player>() { p });
             RealState r = new RealState(100, 10);           
-            Board b = new Board(new List<Player>() { p }, new List<RealState>() { r });
+            Board b = new Board(activePlayers, new List<RealState>() { r });
 
             //Act            
             b.Remove(p);
 
             //Assert            
-            Assert.AreEqual(0, b.Players.Count);            
+            Assert.AreEqual(0, activePlayers.NumberOfActivePlayers);            
         }
 
         [Test]
@@ -78,7 +79,7 @@ namespace monopoly.tests
             //Arrange            
             Player p = new Player(300);  
             RealState r = new RealState(100, 10);           
-            Board b = new Board(new List<Player>() { p }, new List<RealState>() { r });
+            Board b = new Board(new Players(new List<Player>() { p }), new List<RealState>() { r });
 
             //Act            
             b.Turn(p, 1);
@@ -94,7 +95,7 @@ namespace monopoly.tests
             //Arrange            
             Player p = new Player(300, new Demanding());  
             RealState r = new RealState(100, 50);           
-            Board b = new Board(new List<Player>() { p }, new List<RealState>() { r });
+            Board b = new Board(new Players(new List<Player>() { p }), new List<RealState>() { r });
 
             //Act            
             b.Turn(p, 1);
@@ -110,7 +111,7 @@ namespace monopoly.tests
             //Arrange            
             Player p = new Player(0);  
             RealState r = new RealState(100, 50);           
-            Board b = new Board(new List<Player>() { p }, new List<RealState>() { r });
+            Board b = new Board(new Players(new List<Player>() { p }), new List<RealState>() { r });
 
             //Act            
             b.Turn(p, 1);
@@ -126,48 +127,15 @@ namespace monopoly.tests
             //Arrange            
             Player p1 = new Player(200);
             Player p2 = new Player(49);  
-            RealState r = new RealState(100, 50, owner: p1);           
-            Board b = new Board(new List<Player>() { p1, p2 }, new List<RealState>() { r });
+            RealState r = new RealState(100, 50, owner: p1);
+            Players players = new Players(new List<Player>() { p1, p2 });
+            Board b = new Board(players, new List<RealState>() { r });
 
             //Act            
             b.Turn(p2, 1);
 
             //Assert            
-            Assert.IsTrue(b.Players.ContainsKey(p1));
-            Assert.IsFalse(b.Players.ContainsKey(p2));            
-        }
-
-        [Test]
-        public void TestPlayerInGame()
-        {
-            //Arrange            
-            Player p1 = new Player(200);
-            Player p2 = new Player(49);  
-            RealState r = new RealState(100, 50, owner: p1);           
-            Board b = new Board(new List<Player>() { p1, p2 }, new List<RealState>() { r });
-
-            //Act            
-            b.Turn(p2, 1);
-
-            //Assert            
-            Assert.IsTrue(b.InGame(p1));
-            Assert.IsFalse(b.InGame(p2));
-        }
-
-        [Test]
-        public void TestNumberOfActivePlayers()
-        {
-            //Arrange            
-            Player p1 = new Player(200);
-            Player p2 = new Player(49);  
-            RealState r = new RealState(100, 50, owner: p1);           
-            Board b = new Board(new List<Player>() { p1, p2 }, new List<RealState>() { r });
-
-            //Act            
-            b.Turn(p2, 1);
-
-            //Assert            
-            Assert.AreEqual(1, b.NumberOfActivePlayers);
+            Assert.AreEqual(1, players.NumberOfActivePlayers);
         }
     }
 }
