@@ -20,15 +20,15 @@ namespace monopoly
         public string Run()
         {           
             Dictionary<string, int> stats = new Dictionary<string, int>();
-            for (int i = 0; i < population; i++)
-            {
-                var winner = Exercise();
-                if (!stats.ContainsKey(winner))
-                {
-                    stats.Add(winner, 0);
-                }
-                stats[winner] += 1;
-            }      
+            Parallel.For(0, this.population,
+            i => {
+                    var winner = Exercise();                
+                    if (!stats.ContainsKey(winner))
+                    {
+                        stats.Add(winner, 0);
+                    }
+                    stats[winner] += 1;    
+                 });      
 
             stats = stats.OrderByDescending(s => s.Value).ToDictionary(s => s.Key, s => s.Value);
             string output = $"Simulations: {this.population}\n";
